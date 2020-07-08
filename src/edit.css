@@ -1,0 +1,22 @@
+.container-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.textField {
+    margin: 30px;
+    margin-left: 30px;
+    width: 200px;
+}
+
+.dense {
+    margin-top: 19px;
+}
+
+.back-btn {
+    display: flex;
+    align-self: flex-start;
+    margin-left: 20px;
+}

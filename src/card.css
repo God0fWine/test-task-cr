@@ -1,0 +1,14 @@
+.card {
+    max-width: 345px;
+    max-height: 500px;
+  }
+.media {
+    height: 140px
+}
+.buttons {
+    flex-direction: row;
+    justify-content: flex-end;
+}
+.description {
+    font-size: 10px;
+}
