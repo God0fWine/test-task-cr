@@ -1,9 +1,11 @@
 export const initialState = {
     name: '',
-    description: '',
+    descr: '',
     price: 0,
     discount: 0,
-    discountDate: 0
+    discountDate: 0,
+    id: 0,
+    image: ''
 }
 
 export const reducer = (state, action) => {
@@ -11,10 +13,12 @@ export const reducer = (state, action) => {
         case 'EDIT':
             return {
                 name: action.data.name,
-                description: action.data.desc,
+                descr: action.data.descr,
                 price: action.data.price,
                 discount: action.data.discount,
-                discountDate: action.data.discountDate
+                discountDate: action.data.discountDate,
+                id: action.data.id,
+                image: action.data.image
             };
         case 'BACK':
             return '';

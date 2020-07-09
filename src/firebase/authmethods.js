@@ -3,24 +3,26 @@ import firebase from 'firebase'
 
 
 export const authMethods = {
-    signup: (email, password) => {
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(res => {
-                console.log(res)
+    signup: async (email, password) => {
+        let res = await firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(() => {
+                return firebase.auth().currentUser;
             })
             .catch(err => {
-                console.error(err)
+                return err;
             })
+        return res;
     },
-    signin: (email, password) => {
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(res => {
-                console.log(res)
+    signin: async (email, password) => {
+        let res = await firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(() => {
+                return firebase.auth().currentUser;
             })
             .catch(err => {
-                console.error(err)
+                // console.log(err)
+                return err;
             })
-
+        return res;
     },
     signout: (email, password) => {
 

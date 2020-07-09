@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import NumberFormat from 'react-number-format';
@@ -6,42 +6,18 @@ import { Link, Redirect, useLocation } from 'react-router-dom';
 
 import './edit.css';
 
-function NumberFormatCustomDollar(props) {
 
-    const { inputRef, ...other } = props;
-
-    return (
-        <NumberFormat
-            {...other}
-            getInputRef={inputRef}
-            format="$############"
-            thousandSeparator
-            decimalSeparator
-            suffix="$"
-        />
-    );
-}
-
-function NumberFormatCustomPercent(props) {
-    const { inputRef, ...other } = props;
-
-    return (
-        <NumberFormat
-            {...other}
-            getInputRef={inputRef}
-            format="%##"
-            thousandSeparator
-            prefix="%"
-        />
-    );
-}
-
-
-function Edit({ isLoggedIn }) {
+function Edit({ isLoggedIn, toUpdate, toAdd }) {
 
     let location = useLocation();
-    
-    console.log(location)
+    const [name, setName] = useState(location.state !== undefined ? location.state.name : '');
+    const [descr, setDescr] = useState(location.state !== undefined ? location.state.descr : '');
+    const [price, setPrice] = useState(location.state !== undefined ? location.state.price : '');
+    const [discount, setDiscount] = useState(location.state !== undefined ? location.state.discount : '');
+    const [discountDate, setdiscountDate] = useState(location.state !== undefined ? location.state.discountDate : '');
+    const [image, setImage] = useState(location.state !== undefined ? location.state.discountDate : '');
+
+
     if (!isLoggedIn) {
         return (<Redirect to='/' />)
     }
@@ -61,7 +37,21 @@ function Edit({ isLoggedIn }) {
                 className="textField dense"
                 margin="dense"
                 helperText="Required"
-                defaultValue={location.state !== undefined ? location.state.name : ''}
+                required
+                defaultValue={name}
+                onChange={(event) => setName(event.target.value)}
+            />
+            <input
+                accept="image/*"
+                id="raised-button-file"
+                className="input-img"
+                multiple
+                required
+                type="file"
+                onChange={(event) => {
+                   return (event.target.files.length !== 0) ? setImage(event.target.files[0]) : null;
+                    
+                }}
             />
             <TextField
                 id="outlined-textarea"
@@ -70,27 +60,25 @@ function Edit({ isLoggedIn }) {
                 multiline
                 margin="dense"
                 helperText="Optional"
-                defaultValue={location.state !== undefined ? location.state.description : ''}
+                defaultValue={descr}
+                onChange={(event) => setDescr(event.target.value)}
             />
             <TextField
                 className="textField dense"
                 label="Цена"
                 id="formatted-numberformat-input"
-                InputProps={{
-                    inputComponent: NumberFormatCustomDollar,
-                }}
                 helperText="Required"
-                defaultValue={location.state !== undefined ? location.state.price : 0}
+                required
+                defaultValue={price}
+                onChange={(event) => setPrice(event.target.value)}
             />
             <TextField
                 className="textField dense"
                 label="Процент скидки"
                 id="formatted-numberformat-input"
-                InputProps={{
-                    inputComponent: NumberFormatCustomPercent,
-                }}
                 helperText="Optional"
-                defaultValue={location.state !== undefined ? location.state.discount : 0}
+                defaultValue={discount}
+                onChange={(event) => setDiscount(event.target.value)}
             />
             <TextField
                 id="standard-dense"
@@ -98,15 +86,43 @@ function Edit({ isLoggedIn }) {
                 className="textField dense"
                 margin="dense"
                 helperText="Required"
-                defaultValue={location.state !== undefined ? location.state.discountDate : 0}
+                defaultValue={discountDate}
+                onChange={(event) => setdiscountDate(event.target.value)}
             />
             <Link to="/cards">
-                <Button variant="contained" color="primary" >
-                    Primary
+                <Button variant="contained" color="primary" onClick={() => {
+                    let now = new Date();
+                    let endOfDiscount = new Date();
+                    endOfDiscount.setDate(now.getDate() + +discountDate)
+                    if (location.state !== undefined) {
+                        let data = {
+                            name: name,
+                            descr: descr,
+                            price: price,
+                            discount: discount,
+                            discountDate: endOfDiscount,
+                            id: location.state.id,
+                            image: image
+                        }
+                        toUpdate(data)
+                    }
+                    else {
+                        let data = {
+                            name: name,
+                            descr: descr,
+                            price: price,
+                            discount: discount,
+                            discountDate: endOfDiscount,
+                            image: image
+                        }
+                        toAdd(data)
+                    }
+                }}>
+                    Accept
                 </Button>
             </Link>
 
-        </div>
+        </div >
     );
 }
 

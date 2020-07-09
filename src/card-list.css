@@ -1,0 +1,8 @@
+.card-list {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.add-icon {
+    align-self: flex-end;
+}
