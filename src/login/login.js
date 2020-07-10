@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Redirect } from 'react-router-dom';
-import { authMethods } from './firebase/authmethods';
+import { authMethods } from '../firebase/authmethods';
 
 import './login.css';
 
-const logIn = async(login, password, onLogin) => {
+const logIn = async(login, password, onLogin, setPassword, setLogin) => {
     let res = await authMethods.signin(login, password);
-    console.log(res.code)
 
     switch(res.code){
         case 'auth/user-not-found': 
@@ -16,7 +15,6 @@ const logIn = async(login, password, onLogin) => {
             break;
         case 'auth/invalid-email':
             alert('Invalid email');
-            console.log(login)
             break;
         case 'auth/wrong-password':
             alert('Wrong password')
@@ -27,11 +25,13 @@ const logIn = async(login, password, onLogin) => {
         default: 
             onLogin();
     }
+    setPassword('');
+    setLogin('');
+
 }
 
 const register = async(login, password, onLogin) => {
     let res = await authMethods.signup(login, password);
-    console.log(res.code)
 
     switch(res.code){
         case 'auth/invalid-email':
@@ -84,10 +84,10 @@ export default function Login({ isLoggedIn, onLogin }) {
                     onChange={(event) => {event.persist(); setPassword(password + event.target.value)}}
                 />
                 <div className="buttons-lg">
-                    <Button variant="contained" color="primary" onClick={() => {logIn(login, password, onLogin); setPassword('')} }>
+                    <Button variant="contained" color="primary" onClick={() => {logIn(login, password, onLogin, setPassword, setLogin)} }>
                         Log In
                     </Button>
-                    <Button variant="contained" color="primary" onClick={() => {register(login, password, onLogin); setPassword('')}}>
+                    <Button variant="contained" color="primary" onClick={() => {register(login, password, onLogin, setPassword, setLogin)}}>
                         Register
                     </Button>
                 </div>

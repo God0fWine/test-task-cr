@@ -15,6 +15,10 @@
     margin-top: 19px;
 }
 
+.btm {
+    margin-bottom: 20px;
+}
+
 .back-btn {
     display: flex;
     align-self: flex-start;

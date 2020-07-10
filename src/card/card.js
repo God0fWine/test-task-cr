@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { Link } from 'react-router-dom';
-import { reducer, initialState } from './reducer';
+import { reducer, initialState } from '../reducer/reducer';
 
 import './card.css';
 
@@ -32,14 +32,16 @@ const funcPress = (name, text, cost, discount, daysLeft, id, image) => {
 function ShowCard({ id, name, descr, price, discount, discountDate, del, image }) {
 
     const [state, dispatch] = useReducer(reducer, initialState);
-
+    
     let now = Date.now()/1000;
     let daysLeft = null;
-    if(discountDate !== undefined && discountDate !== null){
+    if(discountDate !== undefined && discountDate !== null && !discountDate.__proto__.getDay){
         daysLeft = discountDate.seconds > now ? Math.floor((discountDate.seconds - now)/86400) : null ;
+    } else {
+        let ourDate = Date.parse(discountDate)/1000;
+        daysLeft = ourDate > now ? Math.floor((ourDate - now)/86400) : null ;
     }
-    // daysLeft = discountDate;
-    let costWithDesc = (discount && daysLeft) ? (`$${price - price * discount / 100} with offer ${discount}%, last ${daysLeft} day(s)`) : ('$' + price);
+    let costWithDesc = (discount && daysLeft) ? (`$${(+price - +price * +discount / 100).toFixed(2)} with offer ${discount}%, last ${daysLeft} day(s)`) : ('$' + price);
 
 
     return (
@@ -48,10 +50,9 @@ function ShowCard({ id, name, descr, price, discount, discountDate, del, image }
                 <CardMedia
                     className="media"
                     image={image}
-                    title="Contemplative Reptile"
                 />
                 <CardContent>
-                    <Typography gutterBottom variant="h4" component="h2">
+                    <Typography gutterBottom variant="h4" component="h2" className="name">
                         {name}
                     </Typography>
                     <Typography gutterBottom variant="inherit" component="h3" >

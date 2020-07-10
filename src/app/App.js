@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Edit from './edit';
-import Login from './login';
-import CardList from './card-list'
-import firebaseconfig from './firebase/firebaseIndex';
+import Edit from '../edit/edit';
+import Login from '../login/login';
+import CardList from '../card-list/card-list'
+import firebaseconfig from '../firebase/firebaseIndex';
 import firebase from 'firebase';
 
 import './App.css';
@@ -46,18 +46,20 @@ export default function App() {
 
     const updateDoc = async (data) => {
         let imageUrl = null;
-        if(data.image) {
+        if(isNaN(data.image)) {
+
             let imgName = Date.now() + data.image.name;
             let storageRef = await firebase.storage().ref(`/images/${imgName}`).put(data.image);
             imageUrl = await storageRef.ref.getDownloadURL();
         } else {
             imageUrl = cards.find(elem => elem.id === data.id).image;
+
         }
         firebase.firestore().collection("items").doc(`${data.id}`).set({
             name: data.name,
             descr: data.descr,
-            price: data.price,
-            discount: data.discount,
+            price: +data.price,
+            discount: +data.discount,
             discountDate: data.discountDate,
             image: imageUrl
         })
@@ -66,8 +68,8 @@ export default function App() {
                     id: data.id,
                     name: data.name,
                     descr: data.descr,
-                    price: data.price,
-                    discount: data.discount,
+                    price: +data.price,
+                    discount: +data.discount,
                     discountDate: data.discountDate,
                     image: imageUrl
                 }
@@ -85,8 +87,8 @@ export default function App() {
         firebase.firestore().collection("items").add({
             name: data.name,
             descr: data.descr,
-            price: data.price,
-            discount: data.discount,
+            price: +data.price,
+            discount: +data.discount,
             discountDate: data.discountDate,
             image: imageUrl
         })
@@ -94,8 +96,8 @@ export default function App() {
                 let newCard = {
                     name: data.name,
                     descr: data.descr,
-                    price: data.price,
-                    discount: data.discount,
+                    price: +data.price,
+                    discount: +data.discount,
                     discountDate: data.discountDate,
                     id: docRef.id,
                     image: imageUrl

@@ -14,5 +14,10 @@
 }
 .description {
     overflow: auto;
-    height: 100px;
+    height: 75px;
+}
+
+.name {
+    overflow: auto;
+    height: 75px;
 }

@@ -19,13 +19,6 @@ firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 firebase.auth()
 firebase.firestore();
-var storageRef = firebase.storage().ref();
-var imagesRef = storageRef.child('images');
-var fileName = 'hi.jpg';
-var spaceRef = imagesRef.child(fileName);
-var path = spaceRef.fullPath
-var name = spaceRef.name
-var imagesRef = spaceRef.parent;
 
 export default {
   firebaseConfig
