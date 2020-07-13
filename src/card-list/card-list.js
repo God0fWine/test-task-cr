@@ -6,6 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import './card-list.css';
 
+//Создание карточек для хранения в массиве и дальнейшем отображении
 const createCard = (cards, del) => {
     let arr = [];
     for(let i = 0; i < cards.length; i++){
@@ -18,18 +19,21 @@ export default function CardList({ cards, del, isLoggedIn }) {
 
     const [showCards, setCards] = useState([]);
 
+    //Если пользователь не авторизировался то перенаправляем его на страничку с авторизацией
     if (!isLoggedIn) {
         return (<Redirect to='/' />)
     }
 
+    //Массив со всеми карточками
     let cardsArr = createCard(cards, del);
-
+    //Проверка для избежания infinite loop и добавление карточек в state компонента
     if(showCards.length !== cardsArr.length){
         setCards([...cardsArr])
     }
 
     return (
         <div className="card-list">
+            {/* Массив с карточками */}
             {showCards}
             <Link to='/update'>
             <Fab color="primary" aria-label="add" className="add-icon">

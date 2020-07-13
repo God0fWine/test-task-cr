@@ -13,6 +13,8 @@ import { reducer, initialState } from '../reducer/reducer';
 
 import './card.css';
 
+//Функция при нажатии на кнопку редактирования карточки
+//Добавляет данные о карточке в store, как в redux, только при использовании react hook useReducer
 const funcPress = (name, text, cost, discount, daysLeft, id, image) => {
 
     return {
@@ -29,10 +31,11 @@ const funcPress = (name, text, cost, discount, daysLeft, id, image) => {
     };
 };
 
-function ShowCard({ id, name, descr, price, discount, discountDate, del, image }) {
 
+function ShowCard({ id, name, descr, price, discount, discountDate, del, image }) {
+    //Reducer для хранения редактируемой карточки
     const [state, dispatch] = useReducer(reducer, initialState);
-    
+    // Расчёт дней, оставшихся до конца скидки
     let now = Date.now()/1000;
     let daysLeft = null;
     if(discountDate !== undefined && discountDate !== null && !discountDate.__proto__.getDay){
@@ -41,6 +44,7 @@ function ShowCard({ id, name, descr, price, discount, discountDate, del, image }
         let ourDate = Date.parse(discountDate)/1000;
         daysLeft = ourDate > now ? Math.floor((ourDate - now)/86400) : null ;
     }
+    //Расчёт цены, со скидкой она или нет
     let costWithDesc = (discount && daysLeft) ? (`$${(+price - +price * +discount / 100).toFixed(2)} with offer ${discount}%, last ${daysLeft} day(s)`) : ('$' + price);
 
 
@@ -66,10 +70,13 @@ function ShowCard({ id, name, descr, price, discount, discountDate, del, image }
             <CardActions className="buttons">
 
                 <IconButton aria-label="Edit" color='primary'
+
                     onFocus={() => {
+                        //при наводе на кнопку редактирования посылаем данные в store
                         dispatch(funcPress(name, descr, price, discount, daysLeft, id, image))
                     }}
                 >
+                    {/* Переход на страничку с редактированием карточки, в state хранятся её текущие данные */}
                     <Link to={
                         {
                             pathname: '/update',
@@ -79,7 +86,7 @@ function ShowCard({ id, name, descr, price, discount, discountDate, del, image }
                         <EditIcon />
                     </Link>
                 </IconButton>
-
+                    {/* Кнопка удаления карточки */}
                 <IconButton aria-label="Delete" color='secondary' onClick={() => del(id)}>
                     <DeleteIcon />
                 </IconButton>

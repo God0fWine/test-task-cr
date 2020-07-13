@@ -1,8 +1,9 @@
 import firebaseconfig from './firebaseIndex'
 import firebase from 'firebase'
 
-
+//Методы для аутентификации и регистрации пользователя
 export const authMethods = {
+    //Регистрация
     signup: async (email, password) => {
         let res = await firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(() => {
@@ -13,6 +14,7 @@ export const authMethods = {
             })
         return res;
     },
+    //Аутентификация
     signin: async (email, password) => {
         let res = await firebase.auth().signInWithEmailAndPassword(email, password)
             .then(() => {
@@ -24,6 +26,7 @@ export const authMethods = {
             })
         return res;
     },
+    //Будущий выход с аккаунта
     signout: (email, password) => {
 
     },

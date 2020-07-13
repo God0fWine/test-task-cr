@@ -7,7 +7,9 @@ import './edit.css';
 
 function Edit({ isLoggedIn, toUpdate, toAdd }) {
 
+    //location для получения state при переходе черед <Link>, если редактируем карточку 
     let location = useLocation();
+    //Состояния всех input
     const [disableBtn, becomeWork] = useState(true);
     const [name, setName] = useState(location.state !== undefined ? location.state.name : '');
     const [descr, setDescr] = useState(location.state !== undefined ? location.state.descr : '');
@@ -17,10 +19,12 @@ function Edit({ isLoggedIn, toUpdate, toAdd }) {
     const [image, setImage] = useState(location.state !== undefined ? location.state.discountDate : '');
 
 
+    //Если пользователь не авторизировался то перенаправляем его на страницу авторизации
     if (!isLoggedIn) {
         return (<Redirect to='/' />)
     }
 
+    //Функция проверки валидности всех input, если все валидны то кнопка Update становится рабочей
     const handleForm = () => {
         let arr = [false, false, false, false, false, false];
 
@@ -41,6 +45,8 @@ function Edit({ isLoggedIn, toUpdate, toAdd }) {
         
     }
 
+    //При нажатии на кнопку Update идёт проверка, было ли это редактирование карточки, или добавление новой
+    //Вызывается соответствующая, зависимо от этого, функция (редактирование или добавление)
     const handleClick = () => {
 
         let now = new Date();
@@ -82,14 +88,21 @@ function Edit({ isLoggedIn, toUpdate, toAdd }) {
                 </Link>
             </div>
             <form className="container-edit" onBlur={() => handleForm() }>
-                <input type="text" className="dense" value={name} onChange={(event) => setName(event.target.value)} required placeholder="Заголовок" maxLength="60" />
+                <label for="name" className="label">Название товара</label>
+                <input type="text" id="name" className="dense" value={name} onChange={(event) => setName(event.target.value)} required placeholder="Заголовок" maxLength="60" />
+                <label for="raised-button-file" className="label">Изображение товара</label>
                 <input accept="image/*" id="raised-button-file" className="input-img" multiple required type="file" onChange={(event) => { return (event.target.files.length !== 0) ? setImage(event.target.files[0]) : null; }} />
-                <textarea type="text" className="dense" placeholder="Описание товара" maxLength="200" cols="40" rows="5" value={descr} onChange={(event) => setDescr(event.target.value)} />
-                <input type="number" className="dense" placeholder="Цена" maxLength="11" min="0" max="99999999.99" required value={price} onChange={(event) => setPrice(event.target.value)} />
-                <input type="number" className="dense" placeholder="Процент скидки" maxLength="2" min="10" max="90" value={discount} onChange={(event) => setDiscount(event.target.value)} />
-                <input type="number" className="dense btm" placeholder="Дата окончания скидки" maxLength="2" value={discountDate} onChange={(event) => setdiscountDate(event.target.value)} />
+                <label for="descr" className="label">Описание товара</label>
+                <textarea type="text" id="descr" className="dense" placeholder="Описание товара" maxLength="200" cols="40" rows="5" value={descr} onChange={(event) => setDescr(event.target.value)} />
+                <label for="price" className="label">Цена</label>
+                <input type="number" id="price" className="dense" placeholder="Цена" maxLength="11" min="0" max="99999999.99" required value={price} onChange={(event) => setPrice(event.target.value)} />
+                <label for="discount" className="label">Процент скидки</label>
+                <input type="number" id="discount" className="dense" placeholder="Процент скидки" maxLength="2" min="10" max="90" pattern="{2}" value={discount} onChange={(event) => setDiscount(event.target.value)} />
+                <label for="discountDate" className="label">Дней до конца скидки</label>
+                <input type="number" id="discountDate" className="dense btm" placeholder="Дата окончания скидки" maxLength="2" value={discountDate} onChange={(event) => setdiscountDate(event.target.value)} />
             </form>
 
+        {/* При добавлении или изменении карточки перенаправляем на страницу с карточками */}
             <Button variant="contained" color="primary" disabled={disableBtn} onClick={() => handleClick() }>
                 <Link to="/cards">
                     Accept

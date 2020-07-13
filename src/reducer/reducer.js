@@ -1,3 +1,4 @@
+//Начальный стейт Reducerа
 export const initialState = {
     name: '',
     descr: '',
@@ -7,7 +8,7 @@ export const initialState = {
     id: 0,
     image: ''
 }
-
+//"store" где храним данные о будущей редактированной карточки
 export const reducer = (state, action) => {
     switch (action.type) {
         case 'EDIT':

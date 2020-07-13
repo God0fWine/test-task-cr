@@ -6,9 +6,11 @@ import { authMethods } from '../firebase/authmethods';
 
 import './login.css';
 
+// Функция аутентификации пользователя
 const logIn = async(login, password, onLogin, setPassword, setLogin) => {
     let res = await authMethods.signin(login, password);
 
+    //Обработка возможных ошибок
     switch(res.code){
         case 'auth/user-not-found': 
             alert('User not found');
@@ -30,9 +32,11 @@ const logIn = async(login, password, onLogin, setPassword, setLogin) => {
 
 }
 
+//Функция регистрации пользователя
 const register = async(login, password, onLogin) => {
     let res = await authMethods.signup(login, password);
 
+    //Обработка возможных ошибок при регистрации
     switch(res.code){
         case 'auth/invalid-email':
             alert('Invalid email');
@@ -52,9 +56,12 @@ const register = async(login, password, onLogin) => {
 }
 
 export default function Login({ isLoggedIn, onLogin }) {
+
+    //state для логина
     const [login, setLogin] = useState('');
+    //state для пароля
     const [password, setPassword] = useState('');
-    
+    //если пользователь аутентифицирован то перенаправляем на страницу с карточками
     if (isLoggedIn) {
         return <Redirect to="/cards"/>
     }

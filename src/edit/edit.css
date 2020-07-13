@@ -12,7 +12,11 @@
 }
 
 .dense {
-    margin-top: 19px;
+    width: 200px
+}
+
+.label {
+    margin-top: 10px;
 }
 
 .btm {
